@@ -1,0 +1,63 @@
+{
+  "title": "CUESTIONARIO SOBRE FEDERICO GARCÍA LORCA",
+  "report_pdf_filename": "Report_Lorca",
+  "blank_pdf_filename": "Cuestionario_Lorca",
+  "questions": [
+    {
+      "number": 1,
+      "sectionTitle": "1 · EL AUTOR",
+      "question": "¿Dónde nació Federico García Lorca?",
+      "options": ["En Fuente Vaqueros", "En Granada", "En Madrid", "En Sevilla"],
+      "correctAnswer": "En Fuente Vaqueros"
+    },
+    {
+      "number": 2,
+      "sectionTitle": "1 · EL AUTOR",
+      "question": "¿Con qué grupo de artistas se relacionó Lorca en Madrid?",
+      "options": ["La Generación del 98", "La Generación del 27", "El Modernismo", "La Generación del 14"],
+      "correctAnswer": "La Generación del 27"
+    },
+    {
+      "number": 3,
+      "sectionTitle": "2 · LA POESÍA",
+      "question": "¿Cómo se titula el primer libro de poemas de Lorca?",
+      "options": ["Romancero gitano", "Poeta en Nueva York", "Libro de poemas", "Canciones"],
+      "correctAnswer": "Libro de poemas"
+    },
+    {
+      "number": 4,
+      "sectionTitle": "2 · LA POESÍA",
+      "question": "¿Cuál es el tema central del Romancero gitano?",
+      "options": ["La ciudad moderna", "El amor cortés", "La fusión de lo gitano y lo andaluz", "La guerra civil"],
+      "correctAnswer": "La fusión de lo gitano y lo andaluz"
+    },
+    {
+      "number": 5,
+      "sectionTitle": "3 · EL TEATRO",
+      "question": "¿Qué obra de Lorca forma parte de la trilogía rural?",
+      "options": ["La casa de Bernarda Alba", "Mariana Pineda", "El público", "Así que pasen cinco años"],
+      "correctAnswer": "La casa de Bernarda Alba"
+    },
+    {
+      "number": 6,
+      "sectionTitle": "3 · EL TEATRO",
+      "question": "¿Cuál es el tema principal de Bodas de sangre?",
+      "options": ["La honra andaluza y el destino trágico", "La vida en la corte", "La revolución social", "El exilio"],
+      "correctAnswer": "La honra andaluza y el destino trágico"
+    },
+    {
+      "number": 7,
+      "sectionTitle": "4 · ESTILO",
+      "question": "¿Qué elementos caracterizan el estilo de Lorca?",
+      "options": ["La metáfora surrealista y el símbolo", "La sátira política", "El verso libre experimental", "La prosa barroca"],
+      "correctAnswer": "La metáfora surrealista y el símbolo"
+    },
+    {
+      "number": 8,
+      "sectionTitle": "4 · ESTILO",
+      "question": "¿En qué año murió Federico García Lorca?",
+      "options": ["1936", "1939", "1945", "1928"],
+      "correctAnswer": "1936"
+    }
+  ]
+}

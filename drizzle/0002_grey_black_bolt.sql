@@ -1,0 +1,1 @@
+ALTER TABLE "classes" ADD COLUMN "reading_pause_stage" integer DEFAULT 0 NOT NULL;

@@ -1,0 +1,23 @@
+# Dipendenze locali (mai nel context di build)
+node_modules/
+.pnpm-store/
+
+# Artefatti di build (il Dockerfile multi-stage li ricrea)
+dist/
+build/
+
+# Ambiente e segreti
+.env
+.env.*
+!.env.example
+
+# VCS / OS
+.git/
+.gitignore
+.DS_Store
+*.log
+dev-server.log
+
+# Backup e pacchetti
+.quiz-backups/
+*.zip

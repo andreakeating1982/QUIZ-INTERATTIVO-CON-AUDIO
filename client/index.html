@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="it">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Bécquer Quiz Interattivo</title>    
+    <!-- THIS IS THE START OF A COMMENT BLOCK, BLOCK TO BE DELETED: Google Fonts here, example:
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    THIS IS THE END OF A COMMENT BLOCK, BLOCK TO BE DELETED -->
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Auto-resize iframe: comunica l'altezza al parent per l'embed nel blog -->
+    <script>
+      (function() {
+        if (window === window.parent) return;
+        var sendHeight = function() {
+          var h = Math.max(
+            document.body.scrollHeight,
+            document.documentElement.scrollHeight,
+            document.body.offsetHeight,
+            document.documentElement.offsetHeight,
+            document.getElementById('root') && document.getElementById('root').scrollHeight || 0
+          );
+          window.parent.postMessage({ type: "labvisivo:height", height: h }, "*");
+        };
+        window.addEventListener("load", function() { setTimeout(sendHeight, 150); });
+        window.addEventListener("resize", sendHeight);
+        if (window.MutationObserver) {
+          var obs = new MutationObserver(sendHeight);
+          obs.observe(document.body, { childList: true, subtree: true, attributes: true, characterData: true });
+        }
+        setTimeout(sendHeight, 500);
+        setTimeout(sendHeight, 1500);
+      })();
+    </script>
+  </body>
+
+</html>

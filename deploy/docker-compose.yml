@@ -1,0 +1,53 @@
+# ============================================================
+# docker-compose.yml — Bécquer Quiz Interattivo
+# Avvia l'app con PostgreSQL in un unico comando
+# ============================================================
+#
+# Utilizzo:
+#   docker compose up -d
+#
+# L'app sarà disponibile su http://localhost:3000
+
+services:
+  # --- Database PostgreSQL ---
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: becquer
+      POSTGRES_PASSWORD: becquer_secret
+      POSTGRES_DB: becquer_quiz
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U becquer -d becquer_quiz"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # --- Bécquer Quiz App ---
+  # Build context = root del repo (../) dove vive il Dockerfile multi-stage
+  app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      # Connessione al database PostgreSQL (service "db" qui sopra)
+      DATABASE_URL: postgresql://becquer:becquer_secret@db:5432/becquer_quiz?sslmode=disable
+      # URL pubblico dell'app (cambia con il tuo dominio se in produzione)
+      BETTER_AUTH_URL: http://localhost:3000
+      # Chiave per crittografia delle sessioni (cambiala con una sicura!)
+      BETTER_AUTH_SECRET: cambiami-con-una-stringa-casuale-di-almeno-32-caratteri
+      NODE_ENV: production
+      PORT: 3000
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
