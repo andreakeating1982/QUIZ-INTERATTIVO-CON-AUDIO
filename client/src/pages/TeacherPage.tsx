@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { generateReportPdf, generateBlankQuestionsPdf } from "@/lib/reportPdf";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 // ── Audio segments for Reading Pauses ──
 const READING_SECTIONS = [
@@ -610,13 +611,7 @@ export default function TeacherPage() {
                             const hasAnsweredCurrent = classDetail?.currentQuestion
                               ? studentAnswers.some((a: any) => a.questionNumber === classDetail.currentQuestion)
                               : false;
-                            const sectionColors = [
-                              { filled: 'bg-red-600', empty: 'border-red-500 bg-transparent' },
-                              { filled: 'bg-amber-500', empty: 'border-amber-400 bg-transparent' },
-                              { filled: 'bg-green-600', empty: 'border-green-500 bg-transparent' },
-                              { filled: 'bg-blue-600', empty: 'border-blue-500 bg-transparent' },
-                              { filled: 'bg-purple-600', empty: 'border-purple-500 bg-transparent' }
-                            ];
+                            const sectionColors = ['#dc2626', '#f59e0b', '#16a34a', '#2563eb', '#9333ea'];
 
                             // Build section status for colored dots (matches PERFETTO_2 reference)
                             const sectionStatus = shakespeareQuestions ?
@@ -630,68 +625,50 @@ export default function TeacherPage() {
                                   submitted: answeredInSection.length > 0,
                                   count: answeredInSection.length,
                                   total: sectionQuestions.length,
-                                  color: sectionColors[idx % sectionColors.length].filled,
-                                  emptyStyle: sectionColors[idx % sectionColors.length].empty
+                                  color: sectionColors[idx % sectionColors.length],
                                 };
                               }) : [];
 
                             return (
-                              <div key={student.id} className="rounded-xl border border-border/50">
-                                <div
-                                  role="button"
-                                  tabIndex={0}
-                                  onClick={() => setExpandedStudent(isExpanded ? null : student.id)}
-                                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setExpandedStudent(isExpanded ? null : student.id); } }}
-                                  className={`w-full flex flex-wrap items-center justify-center gap-x-1.5 gap-y-1.5 sm:gap-x-3 sm:gap-y-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-muted/30 hover:bg-muted/60 transition-colors text-center cursor-pointer ${hasAnswers && isExpanded ? "rounded-t-xl" : "rounded-xl"}`}>
-                                  <div className="size-2 rounded-full shrink-0 bg-gray-300" />
-                                  <div className="flex-1 min-w-0 text-center">
+                              <div key={student.id} className="rounded-xl border border-border/50 bg-muted/10">
+                                <button onClick={() => setExpandedStudent(isExpanded ? null : student.id)} className={`w-full flex items-center gap-2 sm:gap-3 px-3 py-2.5 sm:px-4 hover:bg-muted/30 transition-colors text-left ${hasAnswers && isExpanded ? 'rounded-t-xl' : 'rounded-xl'}`}>
+                                  <div className="size-2.5 rounded-full shrink-0 bg-gray-300"></div>
+                                  <div className="flex-1 min-w-0">
                                     <span
-                                      className="group relative block w-full cursor-pointer"
-                                      title={student.name}
-                                      data-tooltip-name
-                                      onClick={(e) => {
-                                        // Su dispositivi touch (niente hover): tap = mostra/nasconde il nome completo
+                                      className="group relative block min-w-0 font-semibold text-sm text-foreground text-left cursor-pointer"
+                                      onClick={(e: any) => {
                                         if (window.matchMedia('(hover: none)').matches) {
                                           e.stopPropagation();
                                           setTooltipStudent(tooltipStudent === student.id ? null : student.id);
                                         }
                                       }}
                                     >
-                                      <span className="block font-bold text-sm text-foreground truncate uppercase">{student.name}</span>
-                                      <span className={`pointer-events-none absolute left-1/2 bottom-full z-[100] mb-2 -translate-x-1/2 max-w-[85vw] rounded-md bg-black px-2 py-1 text-xs text-white shadow-lg transition-opacity duration-150 ${tooltipStudent === student.id ? "opacity-100" : "opacity-0 group-hover:opacity-100 group-active:opacity-100 group-focus:opacity-100"}`}>
+                                      <span className="block truncate uppercase">{student.name}</span>
+                                      <span className={`pointer-events-none absolute left-1/2 bottom-full z-[100] mb-2 -translate-x-1/2 max-w-[85vw] rounded-md bg-black px-3 py-1.5 text-xs text-white uppercase shadow-lg transition-opacity duration-150 ${tooltipStudent === student.id ? "opacity-100" : "opacity-0 group-hover:opacity-100 group-active:opacity-100 group-focus:opacity-100"}`}>
                                         {student.name}
                                       </span>
                                     </span>
                                   </div>
-                                  <div className="flex flex-wrap items-center justify-center gap-x-1.5 gap-y-1 sm:gap-x-3 min-w-0 max-w-full">
-                                    <div className="flex items-center gap-2 shrink-0">
-                                      {!hasAnsweredCurrent && classDetail?.currentQuestion ? (
-                                        <span className="text-xs sm:text-sm font-bold text-amber-500 whitespace-nowrap">IN ATTESA DI INVIO</span>
-                                      ) : (
-                                        <span className={'text-sm font-bold ' + (student.completed ? scoreColor(student.score) : scoreColor(correctAnswers))}>
-                                          {student.completed ? student.score + '/10' : correctAnswers + '/10'}
-                                        </span>
-                                      )}
-                                    </div>
-                                    <div className="flex items-center gap-1.5 shrink-0">
-                                      {sectionStatus.map((ss: any, i: number) => (
-                                        <div
-                                          key={i}
-                                          className={`size-2.5 rounded-full ${ss.submitted ? ss.color : ss.emptyStyle + ' border-2'}`}
-                                          title={ss.label}
-                                        />
-                                      ))}
-                                    </div>
-                                    <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); handleRemoveStudent(student.id); }} disabled={removeStudentMutation.isPending} className="text-red-400 hover:text-red-600 hover:bg-red-50 px-1.5 h-7 shrink-0" title="Rimuovi studente">
-                                      <XCircle className="size-3.5" />
-                                    </Button>
-                                    {hasAnswers && (
-                                      <div className="text-muted-foreground shrink-0">
-                                        {isExpanded ? <ChevronUp className="size-4" /> : <ChevronDown className="size-4" />}
-                                      </div>
-                                    )}
+                                  <div className={`text-[10px] sm:text-xs font-bold shrink-0 text-center leading-tight max-w-[70px] ${!hasAnsweredCurrent && classDetail?.currentQuestion ? 'text-orange-500' : scoreColor(student.completed ? student.score : correctAnswers)}`}>
+                                    {!hasAnsweredCurrent && classDetail?.currentQuestion ? 'IN ATTESA DI INVIO' : (student.completed ? student.score : correctAnswers) + '/10'}
                                   </div>
-                                </div>
+                                  <div className="hidden lg:flex items-center gap-1.5 shrink-0">
+                                    {sectionStatus.map((ss: any, i: number) => (
+                                      <Tooltip key={i}>
+                                        <TooltipTrigger asChild>
+                                          <div className={`size-2.5 rounded-full cursor-default ${ss.submitted ? '' : 'border-2'}`} style={ss.submitted ? { backgroundColor: ss.color } : { borderColor: ss.color, backgroundColor: 'transparent' }}></div>
+                                        </TooltipTrigger>
+                                        <TooltipContent side="top" className="px-3 py-1.5">
+                                          <p className="text-[10px] font-bold uppercase">{ss.label}: {ss.submitted ? ss.count + '/' + ss.total + ' inviate' : 'IN ATTESA DI INVIO'}</p>
+                                        </TooltipContent>
+                                      </Tooltip>
+                                    ))}
+                                  </div>
+                                  <div className="flex items-center gap-0.5 shrink-0 ml-1">
+                                    <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); handleRemoveStudent(student.id); }} disabled={removeStudentMutation.isPending} className="text-red-500 hover:text-red-700 hover:bg-red-100 px-1.5 h-7 rounded-full" title="Rimuovi studente"><XCircle className="size-4" /></Button>
+                                    {hasAnswers && (<div className="text-muted-foreground">{isExpanded ? <ChevronUp className="size-4" /> : <ChevronDown className="size-4" />}</div>)}
+                                  </div>
+                                </button>
                                 {isExpanded && hasAnswers && (
                                   <div className="rounded-b-xl overflow-hidden">
                                     <AnswerDetails studentAnswers={studentAnswers} shakespeareQuestions={questionsWithAnswers || shakespeareQuestions || []} />
