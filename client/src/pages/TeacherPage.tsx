@@ -657,7 +657,7 @@ export default function TeacherPage() {
                                         }
                                       }}
                                     >
-                                      <span className="block font-bold text-sm text-foreground truncate">{student.name}</span>
+                                      <span className="block font-bold text-sm text-foreground truncate uppercase">{student.name}</span>
                                       <span className={`pointer-events-none absolute left-1/2 bottom-full z-[100] mb-2 -translate-x-1/2 max-w-[85vw] rounded-md bg-black px-2 py-1 text-xs text-white shadow-lg transition-opacity duration-150 ${tooltipStudent === student.id ? "opacity-100" : "opacity-0 group-hover:opacity-100 group-active:opacity-100 group-focus:opacity-100"}`}>
                                         {student.name}
                                       </span>
@@ -927,38 +927,31 @@ function AnswerDetails({ studentAnswers, shakespeareQuestions }: { studentAnswer
     return Array.from(groups.entries()).sort(([a], [b]) => order.indexOf(a) - order.indexOf(b));
   }, [studentAnswers, shakespeareQuestions]);
 
-  const sectionHeaderColors = ['text-red-600', 'text-amber-600', 'text-green-600', 'text-blue-600', 'text-purple-600'];
+  const sectionHeaderColors = ['#dc2626', '#d97706', '#16a34a', '#2563eb', '#9333ea'];
 
   return (
-    <div className="border-t border-border/50 bg-muted/20 p-4 space-y-3">
+    <div className="border-t border-border/40 bg-muted/15 p-4 space-y-4 rounded-b-xl">
       {answersBySection.map(([section, answers]: [string, any[]], sectionIdx: number) => (
-        <div key={section}>
-          <p className={`text-[10px] font-bold uppercase tracking-wider mb-1.5 ${sectionHeaderColors[sectionIdx % sectionHeaderColors.length]}`}>{sectionIdx + 1}. {section}</p>
-          <div className="space-y-1.5">
-            {answers.sort((a, b) => a.questionNumber - b.questionNumber).map((answer: any) => (
-              <div key={answer.id} className="rounded-lg bg-white/50 px-2 py-2">
-                {answer.isCorrect ? (
-                  <div className="flex items-start gap-1.5">
-                    <span className="text-[10px] font-bold text-foreground/40 shrink-0 w-4 text-center mt-px">{answer.questionNumber}</span>
-                    <CheckCircle2 className="size-3.5 text-green-600 shrink-0 mt-0.5" />
-                    <span className="text-xs text-green-700 font-medium min-w-0 flex-1 leading-snug break-words">{answer.selectedAnswer}</span>
-                  </div>
-                ) : (
-                  <div className="space-y-1">
-                    <div className="flex items-start gap-1.5">
-                      <span className="text-[10px] font-bold text-foreground/40 shrink-0 w-4 text-center mt-px">{answer.questionNumber}</span>
-                      <XCircle className="size-3.5 text-red-500 shrink-0 mt-0.5" />
-                      <span className="text-xs text-red-600 min-w-0 flex-1 leading-snug break-words">{answer.selectedAnswer}</span>
-                    </div>
-                    <div className="flex items-start gap-1.5 pl-5">
-                      <span className="text-muted-foreground text-xs shrink-0 leading-snug">→</span>
-                      <span className="text-xs text-green-700 font-medium min-w-0 flex-1 leading-snug break-words">{answer.correctAnswer}</span>
-                    </div>
-                  </div>
+        <div key={section} className="space-y-1.5">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-center" style={{ color: sectionHeaderColors[sectionIdx % sectionHeaderColors.length] }}>{section}</p>
+          {answers.sort((a, b) => a.questionNumber - b.questionNumber).map((answer: any) => (
+            <div key={answer.id} className="flex items-start gap-2 px-3 py-2 rounded-lg bg-white/70 border border-border/30">
+              <span className="text-muted-foreground font-mono text-[11px] w-5 shrink-0 leading-4">#</span>
+              {answer.isCorrect ? (
+                <CheckCircle2 className="size-4 text-green-600 shrink-0 mt-0.5" />
+              ) : (
+                <XCircle className="size-4 text-red-500 shrink-0 mt-0.5" />
+              )}
+              <div className="flex-1 min-w-0 space-y-0.5">
+                <span className={`block text-xs font-medium break-words ${answer.isCorrect ? 'text-green-700' : 'text-red-600'}`} title={answer.selectedAnswer}>{answer.selectedAnswer}</span>
+                {!answer.isCorrect && (
+                  <span className="block text-xs font-medium text-green-700 break-words" title={answer.correctAnswer}>
+                    <span className="text-muted-foreground mr-1">→</span>{answer.correctAnswer}
+                  </span>
                 )}
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       ))}
     </div>
